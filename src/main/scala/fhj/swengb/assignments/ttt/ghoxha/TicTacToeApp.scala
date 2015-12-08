@@ -20,12 +20,16 @@ import scala.util.control.NonFatal
 object TicTacToeApp {
   def main (args: Array[String]){
     Application.launch(classOf[TicTacToeApp], args: _*)
-    val map:Map[TMove, Player] = Map(TopLeft -> PlayerA, BottomLeft -> PlayerB, TopCenter -> PlayerA, TopRight -> PlayerB,
+    val map:Map[TMove, Player] = Map(/*TopLeft -> PlayerB, BottomLeft -> PlayerB, TopCenter -> PlayerB,*/ TopRight -> PlayerB,
     MiddleLeft -> PlayerA, MiddleCenter -> PlayerB, /*MiddleRight -> PlayerA, BottomCenter -> PlayerB,*/ BottomRight -> PlayerA)
 
     val t = new TicTacToe(map, PlayerB)
+    val n = t.turn(MiddleRight, PlayerA)
+    println(n.asString())
     println(t.asString())
     println(t.remainingMoves)
+    println(t.winner)
+    println(t.nextGames)
   }
 }
 
@@ -76,7 +80,7 @@ class TicTacToeAppController extends Initializable {
   }
 
   def buttonClick(): Unit = {
-
+    b1.setText("X")
 
   }
 

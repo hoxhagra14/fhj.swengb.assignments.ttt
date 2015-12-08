@@ -159,40 +159,157 @@ case class TicTacToe(moveHistory: Map[TMove, Player],
     moves
   }
 
+
+
   /**
     * given a tic tac toe game, this function returns all
     * games which can be derived by making the next turn. that means one of the
     * possible turns is taken and added to the set.
     */
-  //lazy val nextGames: Set[TicTacToe] = ???
+  lazy val nextGames: Set[TicTacToe] = {
+    var ticTacToe: Set[TicTacToe] = Set()
+    var nextP = nextPlayer
+    if (nextPlayer == PlayerA)
+      nextP = PlayerB
+    else
+      nextP = PlayerA
 
-  /**
-    * Either there is no winner, or PlayerA or PlayerB won the game.
-    *
-    * The set of moves contains all moves which contributed to the result.
-    */
-   /* def winner: Option[(Player, Set[TMove])] = {
-    //Row 1
-    var winner: Player = PlayerA
-    if (moveHistory.contains(TopLeft) && moveHistory.contains(TopCenter) && moveHistory.contains(TopRight) ) {
-      winner = PlayerB
-    }
-    var move:Set[TMove] = Set()
+    var freeField:Set[TMove] = Set(TopLeft,TopCenter,TopRight,MiddleLeft, MiddleCenter, MiddleRight, BottomLeft, BottomCenter, BottomRight)
     for((key,value)<- moveHistory){
-      val addToMove = Set(key)
-      move = move ++ addToMove
+      freeField -= key
     }
-    Some((winner, move))
+    for(el <- freeField){
+        val addTicTacToe = Set(TicTacToe(Map(el->nextPlayer),nextP ))
+        ticTacToe = ticTacToe ++ addTicTacToe
+    }
+    ticTacToe
+  }
 
+ /* def winner: Option[(Player, Set[TMove])] = {
+
+  var winner: Player = PlayerA
+
+  //map for 3 in a Row
+  val threeInARow = Map("FirstRow" -> List(TopLeft, TopCenter, TopRight),
+                        "SecondRow" -> List(MiddleLeft, MiddleCenter, MiddleRight),
+                        "ThirdRow" -> List(BottomLeft, BottomLeft, BottomRight),
+                        "FirstColumn" -> List(TopLeft, MiddleLeft, BottomLeft),
+                        "SecondColumn" -> List(TopCenter, MiddleCenter, BottomLeft),
+                        "ThirdColumn" -> List(TopRight, MiddleRight, BottomRight),
+                        "LeftDiagonal" -> List(TopLeft, MiddleCenter, BottomRight),
+                        "RightDiagonal" -> List(TopRight, MiddleCenter, BottomLeft))
+  for((key,value)<- threeInARow){
+    if (moveHistory.contains(value(0)) && moveHistory.contains(value(1)) && moveHistory.contains(value(2)) ) {
+      if (moveHistory(value(0)) == moveHistory(value(1)) && moveHistory(value(1)) == moveHistory(value(2))) {
+        winner = moveHistory(value(0))
+        var move: Set[TMove] = Set()
+        for ((key, value) <- moveHistory) {
+          val addToMove = Set(key)
+          move = move ++ addToMove
+        }
+        return Some((winner, move))
+      }
+      return None
+    }
+    else {
+      return None
+    }
+  }
+    //None
   }*/
-  /**
-    * returns a copy of the current game, but with the move applied to the tic tac toe game.
-    *
-    * @param p to be played
-    * @param player the player
-    * @return
-    */
-  //def turn(p: TMove, player: Player): TicTacToe = ???
+/**
+* Either there is no winner, or PlayerA or PlayerB won the game.
+*
+* The set of moves contains all moves which contributed to the result.
+*/
+def winner: Option[(Player, Set[TMove])] = {
+
+var winner: Player = PlayerA
+//Row 1
+if (moveHistory.contains(TopLeft) && moveHistory.contains(TopCenter) && moveHistory.contains(TopRight) ) {
+if(moveHistory(TopLeft) == moveHistory(TopCenter) && moveHistory(TopCenter) == moveHistory(TopRight) ) {
+  winner = moveHistory(TopLeft)
+}
+return None
+}
+//Row 2
+else if (moveHistory.contains(MiddleLeft) && moveHistory.contains(MiddleCenter) && moveHistory.contains(MiddleRight) ) {
+if(moveHistory(MiddleLeft) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(MiddleRight) ) {
+  winner = moveHistory(MiddleLeft)
+}
+return None
+}
+//Row 3
+else if (moveHistory.contains(BottomLeft) && moveHistory.contains(BottomCenter) && moveHistory.contains(BottomRight) ) {
+if(moveHistory(BottomLeft) == moveHistory(BottomCenter) && moveHistory(BottomCenter) == moveHistory(BottomRight) ) {
+  winner = moveHistory(BottomLeft)
+}
+return None
+}
+//Column 1
+else if (moveHistory.contains(TopLeft) && moveHistory.contains(MiddleLeft) && moveHistory.contains(BottomLeft) ) {
+if(moveHistory(TopLeft) == moveHistory(MiddleLeft) && moveHistory(MiddleLeft) == moveHistory(BottomLeft) ) {
+  winner = moveHistory(TopLeft)
+}
+return None
+}
+//column 2
+else if (moveHistory.contains(TopCenter) && moveHistory.contains(MiddleCenter) && moveHistory.contains(BottomCenter) ) {
+if(moveHistory(TopCenter) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(BottomCenter) ) {
+  winner = moveHistory(TopCenter)
+}
+return None
+}
+//column 3
+else if (moveHistory.contains(TopRight) && moveHistory.contains(MiddleRight) && moveHistory.contains(BottomRight) ) {
+if(moveHistory(TopRight) == moveHistory(MiddleRight) && moveHistory(MiddleRight) == moveHistory(BottomRight) ) {
+  winner = moveHistory(TopRight)
+}
+return None
+}
+// diagonal left to right
+else if (moveHistory.contains(TopLeft) && moveHistory.contains(MiddleCenter) && moveHistory.contains(BottomRight) ) {
+if(moveHistory(TopLeft) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(BottomRight) ) {
+  winner = moveHistory(TopLeft)
+}
+return None
+}
+// diagonal right to left
+else if (moveHistory.contains(TopRight) && moveHistory.contains(MiddleCenter) && moveHistory.contains(BottomLeft) ) {
+if(moveHistory(TopRight) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(BottomLeft) ) {
+  winner = moveHistory(TopRight)
+  return None
+}
+}
+else{
+return None
+}
+
+var move:Set[TMove] = Set()
+for((key,value)<- moveHistory){
+val addToMove = Set(key)
+move = move ++ addToMove
+}
+Some((winner, move))
+
+}
+/**
+* returns a copy of the current game, but with the move applied to the tic tac toe game.
+*
+* @param p to be played
+* @param player the player
+* @return
+*/
+def turn(p: TMove, player: Player): TicTacToe = {
+
+val map= Map(p -> player)
+if (player == PlayerA){
+TicTacToe(map, PlayerB)
+}else{
+TicTacToe(map, PlayerA)
+}
+}
+
 
 }
 
