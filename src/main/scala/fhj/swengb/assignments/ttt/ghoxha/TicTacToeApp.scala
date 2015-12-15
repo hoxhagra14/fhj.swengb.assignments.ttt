@@ -44,6 +44,7 @@ object TicTacToeApp {
 
 class TicTacToeApp extends javafx.application.Application {
 
+
   val Fxml = "/fhj/swengb/assignments/ttt/TicTacToeApp.fxml"
   val Css = "fhj/swengb/assignments/ttt/TicTacToeApp.css"
 
@@ -73,6 +74,11 @@ class TicTacToeApp extends javafx.application.Application {
 
 }
 class TicTacToeAppController extends Initializable {
+
+  var actualPlayer:Player = PlayerA
+  var moveHistory:Map[TMove,Player] = Map()
+  var ticTacToeGame = TicTacToe(moveHistory, actualPlayer)
+
   @FXML var  b1: Button = _
   @FXML var  b2: Button = _
   @FXML var  b3: Button = _
@@ -88,70 +94,30 @@ class TicTacToeAppController extends Initializable {
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
   }
 
-  var actualPlayer:Player = PlayerA
-
-  val moveHistory:Map[TMove,Player] = Map()
-
-  val ticTacToeGame = new TicTacToe(moveHistory, actualPlayer)
-
-  def doSomething(button: Button):Unit = {
-    val position:Map[Button,TMove]= Map(b1 -> TopLeft,
-                                    b2 -> TopCenter,
-                                    b3 -> TopRight,
-                                    b4 -> MiddleLeft,
-                                    b5 -> MiddleCenter,
-                                    b6 -> MiddleRight,
-                                    b7 -> BottomLeft,
-                                    b8 -> BottomCenter,
-                                    b9 -> BottomRight)
-
-
-    println("ttt" + ticTacToeGame)
-    ticTacToeGame.turn(position(button),actualPlayer)
-    println("ttt dannach" + ticTacToeGame)
-    //var isFirstPlayer: Boolean = true
+  def doSomething(button: Button, move: TMove):Unit = {
     if (actualPlayer == PlayerA) {
       button.setText("X")
       actualPlayer = PlayerB
-    }
-    else{
+    } else{
       button.setText("O")
       actualPlayer = PlayerA
     }
-
-   // button.setText("x")
-  }
-
-  def buttonClick1(): Unit = doSomething(b1)
-  def buttonClick2(): Unit = doSomething(b2)
-  def buttonClick3(): Unit = doSomething(b3)
-  def buttonClick4(): Unit = doSomething(b4)
-  def buttonClick5(): Unit = doSomething(b5)
-  def buttonClick6(): Unit = doSomething(b6)
-  def buttonClick7(): Unit = doSomething(b7)
-  def buttonClick8(): Unit = doSomething(b8)
-  def buttonClick9(): Unit = doSomething(b9)
-
-
-  def buttonClick(): Unit = {
-    //println("Button: " + btn)
-   /* var isFirstPlayer: Boolean = true
-
-
-    if (isFirstPlayer == true) {
-
-      b1.setText("X")
-      b2.setText("O")
-      isFirstPlayer = false
+    ticTacToeGame = ticTacToeGame.turn(move,actualPlayer)
+    println(ticTacToeGame)
+    if(ticTacToeGame.gameOver){
+      println("truetrueture")
     }
-    val map: Map[TMove, Player] = Map(TopLeft -> PlayerB, BottomLeft -> PlayerB, TopCenter -> PlayerB, TopRight -> PlayerB,
-      MiddleLeft -> PlayerA, MiddleCenter -> PlayerB, /*MiddleRight -> PlayerA, BottomCenter -> PlayerB,*/ BottomRight -> PlayerA)
-    val t = new TicTacToe(map, PlayerB)
-    if (t.gameOver != true) {
-      b3.setText("A")
-    }*/
-
   }
+
+  def buttonClick1(): Unit = doSomething(b1, TopLeft)
+  def buttonClick2(): Unit = doSomething(b2, TopCenter)
+  def buttonClick3(): Unit = doSomething(b3, TopRight)
+  def buttonClick4(): Unit = doSomething(b4, MiddleLeft)
+  def buttonClick5(): Unit = doSomething(b5, MiddleCenter)
+  def buttonClick6(): Unit = doSomething(b6, MiddleRight)
+  def buttonClick7(): Unit = doSomething(b7, BottomLeft)
+  def buttonClick8(): Unit = doSomething(b8, BottomCenter)
+  def buttonClick9(): Unit = doSomething(b9, BottomRight)
 
 
 

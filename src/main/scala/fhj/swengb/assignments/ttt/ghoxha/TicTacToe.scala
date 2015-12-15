@@ -63,9 +63,9 @@ object TicTacToe {
     * creates an empty tic tac toe game
     * @return
     */
-  /*def apply(): TicTacToe ={
+  def apply(): TicTacToe ={
     TicTacToe(null)
-  }*/
+  }
 
 
   /**
@@ -166,7 +166,6 @@ case class TicTacToe(moveHistory: Map[TMove, Player],
   }
 
 
-
   /**
     * given a tic tac toe game, this function returns all
     * games which can be derived by making the next turn. that means one of the
@@ -191,38 +190,6 @@ case class TicTacToe(moveHistory: Map[TMove, Player],
     ticTacToe
   }
 
- /* def winner: Option[(Player, Set[TMove])] = {
-
-  var winner: Player = PlayerA
-
-  //map for 3 in a Row
-  val threeInARow = Map("FirstRow" -> List(TopLeft, TopCenter, TopRight),
-                        "SecondRow" -> List(MiddleLeft, MiddleCenter, MiddleRight),
-                        "ThirdRow" -> List(BottomLeft, BottomLeft, BottomRight),
-                        "FirstColumn" -> List(TopLeft, MiddleLeft, BottomLeft),
-                        "SecondColumn" -> List(TopCenter, MiddleCenter, BottomLeft),
-                        "ThirdColumn" -> List(TopRight, MiddleRight, BottomRight),
-                        "LeftDiagonal" -> List(TopLeft, MiddleCenter, BottomRight),
-                        "RightDiagonal" -> List(TopRight, MiddleCenter, BottomLeft))
-  for((key,value)<- threeInARow){
-    if (moveHistory.contains(value(0)) && moveHistory.contains(value(1)) && moveHistory.contains(value(2)) ) {
-      if (moveHistory(value(0)) == moveHistory(value(1)) && moveHistory(value(1)) == moveHistory(value(2))) {
-        winner = moveHistory(value(0))
-        var move: Set[TMove] = Set()
-        for ((key, value) <- moveHistory) {
-          val addToMove = Set(key)
-          move = move ++ addToMove
-        }
-        return Some((winner, move))
-      }
-      return None
-    }
-    else {
-      return None
-    }
-  }
-    //None
-  }*/
   /**
   * Either there is no winner, or PlayerA or PlayerB won the game.
   *
