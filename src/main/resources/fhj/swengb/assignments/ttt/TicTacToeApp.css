@@ -1,5 +1,5 @@
 
-.button{
+.ticTacToe-button{
     -fx-focus-color: transparent;
     -fx-background-insets: -1, 0, 1, 1;
     -fx-font-weight: bold;
@@ -7,6 +7,8 @@
     -fx-text-fill: blue;
 }
 
+.newGame-button{
+}
 .winning-button {
     -fx-background-color: radial-gradient( radius 100%, white, lightyellow, lawngreen);
     -fx-text-fill: red;

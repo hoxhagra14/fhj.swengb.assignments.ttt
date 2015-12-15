@@ -1,12 +1,13 @@
 package fhj.swengb.assignments.ttt.ghoxha
 
 
+
 import java.awt.event.ActionListener
 import java.net.URL
 import java.util.ResourceBundle
 import javafx.application.Application
 import javafx.fxml.{FXML, Initializable, FXMLLoader}
-import javafx.scene.control.Button
+import javafx.scene.control.{TextArea, Button}
 import javafx.scene.layout.GridPane
 import javafx.scene.{Scene, Parent}
 import javafx.stage.Stage
@@ -30,15 +31,6 @@ object TicTacToeApp {
     println(" remainingMoves" +t.remainingMoves)
     println("winner " + t.winner)
     println(t.nextGames)
-    println("Object:" + t)
-    println("ObjectAdded"+t.turn(BottomCenter,PlayerB))
-    println("ObjectAdded"+t.turn(MiddleRight,PlayerA))
-    println("Object2:" + t)
-    val tf = t.gameOver
-    if (tf == true)
-      println("true")
-    else
-      println("false")
   }
 }
 
@@ -77,7 +69,7 @@ class TicTacToeAppController extends Initializable {
 
   var actualPlayer:Player = PlayerA
   var moveHistory:Map[TMove,Player] = Map()
-  var ticTacToeGame = TicTacToe(moveHistory, actualPlayer)
+  var ticTacToeGame = new TicTacToe(moveHistory, actualPlayer)
 
   @FXML var  b1: Button = _
   @FXML var  b2: Button = _
@@ -89,24 +81,41 @@ class TicTacToeAppController extends Initializable {
   @FXML var  b8: Button = _
   @FXML var  b9: Button = _
 
-  @FXML var gameBoard: GridPane =_
+  @FXML var informationArea: TextArea = _
+  @FXML var highScore: TextArea = _
+  @FXML var gameBoard: GridPane = _
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
+
   }
 
   def doSomething(button: Button, move: TMove):Unit = {
-    if (actualPlayer == PlayerA) {
+    if (ticTacToeGame.nextPlayer == PlayerA){
       button.setText("X")
-      actualPlayer = PlayerB
-    } else{
+      button.setDisable(true)
+    }
+    else{
       button.setText("O")
-      actualPlayer = PlayerA
+      button.setDisable(true)
     }
-    ticTacToeGame = ticTacToeGame.turn(move,actualPlayer)
+
+
+    ticTacToeGame = ticTacToeGame.turn(move,ticTacToeGame.nextPlayer)
     println(ticTacToeGame)
-    if(ticTacToeGame.gameOver){
-      println("truetrueture")
+    if (ticTacToeGame.winner != None){
+      informationArea.setText("PlayerB is winner")
     }
+    if(ticTacToeGame.gameOver){
+      highScore.setText("Game Over! Ein neues Spiel kann nun gestartet werden.")
+    }
+  }
+
+  def newGame():Unit = {
+    ticTacToeGame = TicTacToe(moveHistory,actualPlayer)
+    informationArea.setText("Ein neues Spiel kann nun begonnen werden!")
+    b1.setText(""); b2.setText(""); b3.setText(""); b4.setText("")
+    b5.setText(""); b6.setText(""); b7.setText(""); b8.setText(""); b9.setText("")
+
   }
 
   def buttonClick1(): Unit = doSomething(b1, TopLeft)
@@ -118,6 +127,7 @@ class TicTacToeAppController extends Initializable {
   def buttonClick7(): Unit = doSomething(b7, BottomLeft)
   def buttonClick8(): Unit = doSomething(b8, BottomCenter)
   def buttonClick9(): Unit = doSomething(b9, BottomRight)
+  def buttonNewGame(): Unit = {newGame()}
 
 
 
