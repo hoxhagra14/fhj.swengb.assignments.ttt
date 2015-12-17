@@ -1,5 +1,6 @@
 package fhj.swengb.assignments.ttt.ghoxha
 
+import scala.collection.JavaConverters._
 import scala.collection.Set
 
 /**
@@ -75,13 +76,13 @@ object TicTacToe {
     * @param moves
     * @return
     */
-  //def play(t: TicTacToe, moves: Seq[TMove]): TicTacToe = ???
+  def play(t: TicTacToe, moves: Seq[TMove]): TicTacToe = ???
 
   /**
     * creates all possible games.
     * @return
     */
-  //def mkGames(): Map[Seq[TMove], TicTacToe] = ???
+  def mkGames(): Map[Seq[TMove], TicTacToe] = ???
 
 }
 
@@ -110,7 +111,6 @@ case class TicTacToe(moveHistory: Map[TMove, Player],
     * @return
     */
   def asString(): String = {
-    println(moveHistory)
 
       var fieldTTT: String  = "|---|---|---| \n" +
       "|   |   |   | \n" +
@@ -146,12 +146,15 @@ case class TicTacToe(moveHistory: Map[TMove, Player],
     *
     * The game is over if either of a player wins or there is a draw.
     */
-  val gameOver: Boolean = {
-    if(winner != None)
+    val gameOver: Boolean = {
+    if(winner != None )
       true
+    /*else if (remainingMoves.isEmpty)
+      true*/
     else
       false
   }
+
 
 
   /**
@@ -198,72 +201,74 @@ case class TicTacToe(moveHistory: Map[TMove, Player],
   def winner: Option[(Player, Set[TMove])] = {
 
     var winner: Player = PlayerA
+    var set: Set[TMove] = Set()
     //Row 1
-    if (moveHistory.contains(TopLeft) && moveHistory.contains(TopCenter) && moveHistory.contains(TopRight) ) {
-      if(moveHistory(TopLeft) == moveHistory(TopCenter) && moveHistory(TopCenter) == moveHistory(TopRight) ) {
+    if ((moveHistory.contains(TopLeft) && moveHistory.contains(TopCenter) && moveHistory.contains(TopRight)) &&
+      (moveHistory(TopLeft) == moveHistory(TopCenter) && moveHistory(TopCenter) == moveHistory(TopRight))) {
         winner = moveHistory(TopLeft)
-      }else
-      return None
+        set = Set(TopLeft, TopCenter, TopRight)
+        Some((winner, set))
     }
     //Row 2
-    else if (moveHistory.contains(MiddleLeft) && moveHistory.contains(MiddleCenter) && moveHistory.contains(MiddleRight) ) {
-      if(moveHistory(MiddleLeft) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(MiddleRight) ) {
+    else if ((moveHistory.contains(MiddleLeft) && moveHistory.contains(MiddleCenter) && moveHistory.contains(MiddleRight)) &&
+      (moveHistory(MiddleLeft) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(MiddleRight))) {
         winner = moveHistory(MiddleLeft)
-      }else
-      return None
+        set = Set(MiddleLeft, MiddleCenter, MiddleRight)
+        Some((winner, set))
     }
     //Row 3
-    else if (moveHistory.contains(BottomLeft) && moveHistory.contains(BottomCenter) && moveHistory.contains(BottomRight) ) {
-      if(moveHistory(BottomLeft) == moveHistory(BottomCenter) && moveHistory(BottomCenter) == moveHistory(BottomRight) ) {
+    else if ((moveHistory.contains(BottomLeft) && moveHistory.contains(BottomCenter) && moveHistory.contains(BottomRight)) &&
+      (moveHistory(BottomLeft) == moveHistory(BottomCenter) && moveHistory(BottomCenter) == moveHistory(BottomRight))) {
         winner = moveHistory(BottomLeft)
-      }else
-      return None
+        set = Set(BottomLeft, BottomCenter, BottomRight)
+        Some((winner, set))
+
     }
     //Column 1
-    else if (moveHistory.contains(TopLeft) && moveHistory.contains(MiddleLeft) && moveHistory.contains(BottomLeft) ) {
-      if(moveHistory(TopLeft) == moveHistory(MiddleLeft) && moveHistory(MiddleLeft) == moveHistory(BottomLeft) ) {
+    else if ((moveHistory.contains(TopLeft) && moveHistory.contains(MiddleLeft) && moveHistory.contains(BottomLeft)) &&
+      (moveHistory(TopLeft) == moveHistory(MiddleLeft) && moveHistory(MiddleLeft) == moveHistory(BottomLeft))) {
         winner = moveHistory(TopLeft)
-      }else
-      return None
+        set = Set(TopLeft, MiddleLeft, BottomLeft)
+        Some((winner, set))
     }
     //column 2
-    else if (moveHistory.contains(TopCenter) && moveHistory.contains(MiddleCenter) && moveHistory.contains(BottomCenter) ) {
-      if(moveHistory(TopCenter) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(BottomCenter) ) {
+    else if ((moveHistory.contains(TopCenter) && moveHistory.contains(MiddleCenter) && moveHistory.contains(BottomCenter)) &&
+    (moveHistory(TopCenter) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(BottomCenter))) {
         winner = moveHistory(TopCenter)
-      }else
-      return None
+        set = Set(TopCenter, MiddleCenter, BottomCenter)
+        Some((winner, set))
     }
     //column 3
-    else if (moveHistory.contains(TopRight) && moveHistory.contains(MiddleRight) && moveHistory.contains(BottomRight) ) {
-      if(moveHistory(TopRight) == moveHistory(MiddleRight) && moveHistory(MiddleRight) == moveHistory(BottomRight) ) {
+    else if ((moveHistory.contains(TopRight) && moveHistory.contains(MiddleRight) && moveHistory.contains(BottomRight)) &&
+      (moveHistory(TopRight) == moveHistory(MiddleRight) && moveHistory(MiddleRight) == moveHistory(BottomRight))) {
         winner = moveHistory(TopRight)
-      }else
-      return None
+        set = Set(TopRight, MiddleRight, BottomRight)
+        Some((winner, set))
     }
     // diagonal left to right
-    else if (moveHistory.contains(TopLeft) && moveHistory.contains(MiddleCenter) && moveHistory.contains(BottomRight) ) {
-      if(moveHistory(TopLeft) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(BottomRight) ) {
+    else if ((moveHistory.contains(TopLeft) && moveHistory.contains(MiddleCenter) && moveHistory.contains(BottomRight)) &&
+      (moveHistory(TopLeft) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(BottomRight))) {
         winner = moveHistory(TopLeft)
-      }else
-      return None
+        set = Set(TopLeft, MiddleCenter, BottomRight)
+        Some((winner, set))
     }
     // diagonal right to left
-    else if (moveHistory.contains(TopRight) && moveHistory.contains(MiddleCenter) && moveHistory.contains(BottomLeft) ) {
-      if(moveHistory(TopRight) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(BottomLeft) ) {
+    else if ((moveHistory.contains(TopRight) && moveHistory.contains(MiddleCenter) && moveHistory.contains(BottomLeft)) &&
+      (moveHistory(TopRight) == moveHistory(MiddleCenter) && moveHistory(MiddleCenter) == moveHistory(BottomLeft) )) {
         winner = moveHistory(TopRight)
-      }else
-      return None
+        set = Set(TopRight, MiddleCenter, BottomLeft)
+        Some((winner, set))
     }
     else{
     return None
     }
 
-    var move:Set[TMove] = Set()
+    /* var move:Set[TMove] = Set()
     for((key,value)<- moveHistory){
     val addToMove = Set(key)
     move = move ++ addToMove
     }
-    Some((winner, move))
+    Some((winner, move)) */
 
   }
   /**
@@ -275,9 +280,7 @@ case class TicTacToe(moveHistory: Map[TMove, Player],
   */
   def turn(p: TMove, player: Player): TicTacToe = {
     val map= Map(p -> player)
-    println("Turn" + moveHistory)
     val addedMove = moveHistory ++ map
-    println("Turn" +addedMove)
     if (player == PlayerA){
     TicTacToe(addedMove, PlayerB)
     }else{

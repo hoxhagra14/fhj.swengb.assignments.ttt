@@ -14,6 +14,7 @@ import javafx.stage.Stage
 
 import fhj.swengb.assignments.ttt.ghoxha.PlayerA
 
+import scala.collection.Set
 import scala.util.control.NonFatal
 
 /**
@@ -23,14 +24,10 @@ import scala.util.control.NonFatal
 object TicTacToeApp {
   def main (args: Array[String]){
     Application.launch(classOf[TicTacToeApp], args: _*)
-    val map:Map[TMove, Player] = Map(TopLeft -> PlayerB, BottomLeft -> PlayerB, TopCenter -> PlayerB, TopRight -> PlayerB,
-    MiddleLeft -> PlayerA, MiddleCenter -> PlayerB, /*MiddleRight -> PlayerA, BottomCenter -> PlayerB,*/ BottomRight -> PlayerA)
+    val map:Map[TMove, Player] = Map(BottomLeft -> PlayerA, MiddleLeft -> PlayerA, MiddleRight -> PlayerB, BottomRight -> PlayerB, TopRight -> PlayerB, TopCenter -> PlayerA, TopLeft -> PlayerB, MiddleCenter -> PlayerA)
 
     val t = new TicTacToe(map, PlayerB)
     println(t.asString())
-    println(" remainingMoves" +t.remainingMoves)
-    println("winner " + t.winner)
-    println(t.nextGames)
   }
 }
 
@@ -82,8 +79,6 @@ class TicTacToeAppController extends Initializable {
   @FXML var  b9: Button = _
 
   @FXML var informationArea: TextArea = _
-  @FXML var highScore: TextArea = _
-  @FXML var gameBoard: GridPane = _
 
   override def initialize(location: URL, resources: ResourceBundle): Unit = {
 
@@ -99,23 +94,38 @@ class TicTacToeAppController extends Initializable {
       button.setDisable(true)
     }
 
-
     ticTacToeGame = ticTacToeGame.turn(move,ticTacToeGame.nextPlayer)
-    println(ticTacToeGame)
-    if (ticTacToeGame.winner != None){
-      informationArea.setText("PlayerB is winner")
-    }
     if(ticTacToeGame.gameOver){
-      highScore.setText("Game Over! Ein neues Spiel kann nun gestartet werden.")
+      val winner = ticTacToeGame.winner.getOrElse(PlayerA, Set(TopLeft, TopCenter, TopRight))
+      highlightWinner(winner._2.toList, highlight = true)
+
+      informationArea.setText( "Game Over! \n" + winner._1 + " ist der Sieger")
+      disableButtons(true)
     }
   }
 
-  def newGame():Unit = {
-    ticTacToeGame = TicTacToe(moveHistory,actualPlayer)
-    informationArea.setText("Ein neues Spiel kann nun begonnen werden!")
+  def disableButtons(enable: Boolean):Unit = {
+    b1.setDisable(enable); b2.setDisable(enable); b3.setDisable(enable); b4.setDisable(enable)
+    b5.setDisable(enable); b6.setDisable(enable); b7.setDisable(enable); b8.setDisable(enable); b9.setDisable(enable)
+  }
+
+  def highlightWinner(list: List[TMove], highlight: Boolean):Unit = {
+    val map = Map(b1 -> TopLeft, b2 -> TopCenter, b3 -> TopRight, b4 -> MiddleLeft, b5 -> MiddleCenter, b6 -> MiddleRight, b7 -> BottomLeft, b8 -> BottomCenter, b9 -> BottomRight)
+    if (highlight) {
+      for ((key, value) <- map) {
+        if (list.contains(value))
+          key.getStyleClass.add("winning-button")
+      }
+    }else{
+      for ((key, value) <- map) {
+          key.getStyleClass.remove("winning-button")
+      }
+    }
+  }
+
+  def setDefaultButtonSettings():Unit={
     b1.setText(""); b2.setText(""); b3.setText(""); b4.setText("")
     b5.setText(""); b6.setText(""); b7.setText(""); b8.setText(""); b9.setText("")
-
   }
 
   def buttonClick1(): Unit = doSomething(b1, TopLeft)
@@ -127,7 +137,16 @@ class TicTacToeAppController extends Initializable {
   def buttonClick7(): Unit = doSomething(b7, BottomLeft)
   def buttonClick8(): Unit = doSomething(b8, BottomCenter)
   def buttonClick9(): Unit = doSomething(b9, BottomRight)
-  def buttonNewGame(): Unit = {newGame()}
+  def buttonNewGame(): Unit = {
+    ticTacToeGame = TicTacToe(moveHistory,actualPlayer)
+    informationArea.setText("Ein neues Spiel kann \nnun begonnen werden!")
+    //Setze die Buttons wieder auf Default
+    setDefaultButtonSettings()
+    // Lösche highlighting falls ein neues Spiel begonnen wird
+    highlightWinner(List(), highlight = false)
+    // Buttons die disabled wurden wieder enablen
+    disableButtons(false)
+  }
 
 
 
